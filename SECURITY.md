@@ -1,6 +1,6 @@
 # Security
 
-This is an early single-product starter. Version 0.1.x is the supported development line; there is no security response SLA.
+This is an early curated-catalog starter. Version 0.2.x is the supported development line; there is no security response SLA.
 
 Do not post API keys, personal photos, private transcripts, checkout tokens or exploitable security details in public issues. Use GitHub’s **Report a vulnerability** option if available. Otherwise, open an issue asking for a private reporting channel without including the exploit or sensitive material; wait for a maintainer to provide one.
 

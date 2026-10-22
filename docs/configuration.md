@@ -1,52 +1,67 @@
 # Configuration
 
-The default is offline-style demo commerce with scripted responses. It makes no Shopify or AI requests. Local tooling may access npm or perform its own update/telemetry checks; this is not an air-gapped development environment.
+## Choose a merchant
 
-Copy `.env.example` to `.dev.vars` in the project root. Wrangler/Vite reads this ignored file. Restart the dev server after changing configuration. Never use public frontend environment variables for provider secrets.
+The default export in `storefront.config.js` selects `examples/outdoor/storefront.js`. Vite’s `coffee` mode selects `examples/coffee/storefront.js` on both client and server. Use `npm run dev:coffee` or `npm run build:coffee`. Stop the current local dev server before switching examples; they share local D1 storage in this checkout. Production deployments can replace that selector with a single merchant import.
 
-## Public merchant content
+Each example is a complete configuration contract. Keep stable, unique IDs. Configure:
 
-`storefront.config.js` defines the brand, guide, sample product name, sample price, currency and optional `videoId`. Set `videoId` to a YouTube video you are allowed to embed; blank uses the original local walkthrough. No YouTube script is loaded by the default walkthrough.
+| Field | Purpose |
+| --- | --- |
+| `id`, `name`, `guide` | Merchant identity, scoped session cookie and consistent guide name |
+| `currency`, `country`, `locale` | Sample money formatting and Shopify buyer context |
+| `headline`, `introduction`, `openingQuestion`, `openingChoices` | First-run experience and suggestions |
+| `hero` | Owned image, descriptive alt text and caption |
+| `policies` | Merchant-verified shipping, returns and contact text |
+| `products` | Up to 20 products with stable IDs, handles, aliases, descriptions, facts, use cases and images |
+| `products[].variants` | Up to 100 uniquely identified options with title, sample price and availability |
+| `products[].visuals` | Optional authored image or GLB model, identified by ID and label |
+| `video` | `null`, or `{youtubeId, title}` for an authorized YouTube walkthrough |
+| `tools.photoPreview` | `null`, or `{instructions}` for a category-specific photo concept tool |
 
-This release contains a complete **single-product wall-mount example**. Renaming the config is a starting point, not a catalog importer. Replace `client/shared/product-knowledge.js`, `client/shared/catalog.js`, deterministic replies in `server/wall-conversation.mjs`, and product-specific copy in `server/wall-ai.mjs`, `server/grok-voice.mjs`, `client/wall/ProductStage.tsx` and `client/wall/narration.ts`. Swap assets under `public/` and the procedural scene in `client/wall/hanger-scene.ts`. Check the guide capabilities against features you actually enable.
+Every variant ID is unique across the whole catalog. Aliases help literal requests such as “add two pouches” resolve correctly. Prefer distinctive variant names; ambiguous product or option requests are clarified instead of guessed. A bare number does not authorize an addition. “Add” increments, “set/make” sets the total, “remove two” subtracts, “remove the pouch” removes that option, and “empty my cart” clears all lines. Negated and hypothetical requests do not mutate the cart. Keep supported commands easy to find through suggestions.
 
-Sample capacities, compatibility and kit contents are fictional fixtures. Verify real installation and policy claims with the merchant before enabling checkout. `DESIGN.md` records the visual language.
+Default sample prices, availability and facts are fictional. In Shopify mode prices and stock come from Shopify; authored facts and policies still require merchant review. Product images from Shopify replace the configured overview when available. Authored alternate visuals stay configured.
 
-## OpenAI text and photo concepts
+## Optional visuals
 
-Set `OPENAI_API_KEY` to your own server-side key. `OPENAI_MODEL` defaults to `gpt-5.4-mini`; `IMAGE_MODEL` defaults to `gpt-image-2`. Access and billing depend on your provider account. Image editing uses the Responses decision followed by the Images edits endpoint; transcription uses `gpt-4o-mini-transcribe`.
+```js
+visuals: [
+  {id: 'detail', type: 'image', label: 'Detail', src: '/my-shop/detail.jpg', alt: 'Close view of the product'},
+  {id: 'model', type: 'model', label: '3D model', src: '/my-shop/product.glb', alt: 'Interactive product model'}
+]
+```
 
-Without the key, text uses explicit scripted replies and photo upload is disabled. With the key, uploaded photos can be sent to OpenAI for a requested concept. Do not infer measurements, load ratings or installation safety from a generated image. No API key is bundled, provisioned or shared by this repository.
+Only local paths or HTTPS sources are accepted. The agent chooses a configured ID, never an arbitrary source. GLB models are loaded on demand and support rotate, zoom and reset controls. Convert STEP/STP to a web-ready GLB using your CAD workflow before adding it. Ship only assets you may distribute.
 
-## Voice
+Photo concepts are optional. See `extensions/photo-concepts.js` for a configuration snippet. Configure the instructions for your category, enable OpenAI, and explain the provider upload to visitors. Concepts are illustrative, not measured fit or safety evidence. Both bundled merchants leave photo uploads disabled.
 
-For realtime speech, set `XAI_API_KEY` and `GROK_VOICE_ENABLED=true`. The server opens xAI’s realtime connection with `grok-voice-3.0`; the browser receives a constrained event stream, not your key. The two sample voice presets are configured in `server/grok-voice.mjs`.
+## Server environment
 
-For ElevenLabs speech, set `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` and optionally `ELEVENLABS_FEMALE_VOICE_ID`. `ELEVENLABS_MODEL` defaults to `eleven_v4`. Select voices available to your account. Use OpenAI too for fallback microphone transcription. ElevenLabs is speech output, not the conversational reasoning engine.
+Copy `.env.example` to the ignored `.dev.vars`. Restart local development after changes. Never put secrets in client-facing environment variables.
 
-Voice needs a secure browser context (HTTPS or localhost), user sound activation, and microphone permission for spoken input. Mute and interruption cancel pending output. There is no avatar service dependency.
+`COMMERCE_MODE=demo` uses local sample commerce. OpenAI, xAI and ElevenLabs keys are independent of that choice. No credentials are bundled or created by the repository.
 
-Provider names and model defaults are implementation choices, not guaranteed latency or availability claims. Check your provider account’s model access before enabling public traffic.
+- `OPENAI_API_KEY`: conversational text and fallback transcription. Defaults: `OPENAI_MODEL=gpt-5.4-mini`, `IMAGE_MODEL=gpt-image-2`; transcription uses `gpt-4o-mini-transcribe`. Images are used only when the merchant photo tool is configured and requested.
+- `XAI_API_KEY` plus `GROK_VOICE_ENABLED=true`: realtime `grok-voice-3.0`. The browser gets a constrained stream, never the provider key. Presets are in `server/voice-agent.mjs`.
+- `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`: speech output. Optional `ELEVENLABS_FEMALE_VOICE_ID`; default model `eleven_v4`. OpenAI is needed for fallback recorded-input transcription. ElevenLabs does not reason about shopping.
+
+Provider access, model availability and billing depend on your account. Voice requires HTTPS or localhost, sound activation, and microphone permission for spoken input. Browser autoplay rules still apply.
 
 ## Shopify
 
-Keep `COMMERCE_MODE=demo` until you are ready to use a real cart. Then set:
+Set product `handle` values in your merchant configuration, then map **every** local variant ID to its real Shopify ProductVariant GID:
 
 ```dotenv
 COMMERCE_MODE=shopify
 SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-SHOPIFY_PRODUCT_HANDLE=your-product-handle
-SHOPIFY_VARIANT_ID=gid://shopify/ProductVariant/123456789
-SHOPIFY_CHECKOUT_DOMAIN=your-store.example
+SHOPIFY_VARIANT_MAP_JSON={"daypack-sand":"gid://shopify/ProductVariant/111","daypack-ink":"gid://shopify/ProductVariant/112","bottle-500":"gid://shopify/ProductVariant/113","bottle-750":"gid://shopify/ProductVariant/114","pouch-rust":"gid://shopify/ProductVariant/115"}
+SHOPIFY_CHECKOUT_DOMAIN=shop.your-domain.example
 SHOPIFY_STOREFRONT_PRIVATE_TOKEN=
 ```
 
-Use your canonical **myshopify.com** hostname without `https://` or paths. Publish the product to the appropriate storefront sales channel and supply the full variant GID. The current query reads the first 10 variants; extend it if your selected variant is outside that range.
+The mapping above illustrates the outdoor example; use your real IDs. Each option must map to a different variant. The server verifies that Shopify returns the configured product handle. Products must be published to the appropriate storefront channel. An alternative is an authored `shopifyId` per variant; environment mappings override it.
 
-The adapter is pinned to **Storefront API 2026-10** with US buyer context. It supports tokenless product/cart operations where the store permits them; if needed, supply a **private Storefront token** with only the necessary product and cart permissions. It is sent in the server-side `Shopify-Storefront-Private-Token` header. Do not use an Admin token. The buyer IP is forwarded through Shopify’s documented header when present at Cloudflare’s trusted edge.
+Use a canonical `myshopify.com` hostname without protocol or path. The adapter uses [Storefront API 2026-10](https://shopify.dev/docs/api/storefront/2026-10), queries configured variant IDs in batches, and updates only the requested cart line. It supports tokenless operations where permitted; otherwise use a narrowly scoped **private Storefront token**, sent server-side through `Shopify-Storefront-Private-Token`. Do not supply an Admin token. Buyer IP is forwarded from Cloudflare’s trusted header.
 
-Checkout redirects are limited to HTTPS on the configured myshopify.com hostname or exact `SHOPIFY_CHECKOUT_DOMAIN`. A live cart is re-fetched before redirect. Taxes, shipping, inventory enforcement, discounts, payment and order creation happen in Shopify. The starter does not manage fulfillment, synchronize Admin records, create discounts, or bypass checkout.
-
-The demo adapter cannot hand off to a real store, even when AI is enabled. `COMMERCE_MODE` controls commerce separately from AI keys. Test with a development store before using a production merchant.
-
-Primary reference: [Shopify Storefront API](https://shopify.dev/docs/api/storefront/2026-10).
+Checkout is re-fetched and restricted to HTTPS on the exact configured myshopify.com or checkout hostname. Shopify calculates shipping, taxes and eligible discounts and enforces inventory, payment and order creation. This app does not manage fulfillment, Admin inventory, customer accounts, subscriptions or discounts. Test with a development store first.

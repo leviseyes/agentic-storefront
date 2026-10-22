@@ -1,8 +1,8 @@
 # Contributing
 
-Start with `npm ci` and `npm run dev` on Node 24+. The keyless demo is the default development path; contributions should not require private credentials or a real Shopify order.
+Start with `npm ci` and `npm run dev` on Node 24 or 26. The keyless demo is the default development path; contributions should not require private credentials or a real Shopify order.
 
-Before opening a pull request, run `npm test`, `npm run typecheck`, `npm run build` and `npm run check:public`. Explain the user-visible problem and validation. Include desktop and mobile screenshots for interface changes, and a focused regression test when changing cart consent, quantities, audio lifecycle, session isolation or checkout behavior.
+Before opening a pull request, run `npm test`, `npm run typecheck`, `npm run build`, `npm run build:coffee` and `npm run check:public`. Explain the user-visible problem and validation. Include desktop and mobile screenshots for interface changes, and a focused regression test when changing cart consent, quantities, audio lifecycle, session isolation or checkout behavior.
 
 Keep agent actions small and server-validated. Never trust a model’s claimed quantity, HTML or arbitrary URL. Do not add Admin actions or payment collection to the public chat. Keep commercial secrets, real customer photos, transcripts, product CAD and unlicensed media out of fixtures and screenshots.
 

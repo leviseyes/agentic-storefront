@@ -1,13 +1,16 @@
-<p align="center"><strong>AGENTIC STOREFRONT</strong></p>
-<h1 align="center">The conversation is the storefront.</h1>
-<p align="center">A voice-and-chat shopping experience where the agent shows the product, answers questions, and manages the cart.</p>
-<p align="center"><a href="https://github.com/leviseyes/agentic-storefront/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/leviseyes/agentic-storefront/actions/workflows/ci.yml/badge.svg" /></a> <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-65523b" /> <img alt="Node 24+" src="https://img.shields.io/badge/node-24%2B-65523b" /></p>
+# Agentic Storefront
 
-![The Studio sample storefront](docs/images/storefront-desktop.jpg)
+**A storefront you shop by having a conversation.**
 
-Most store assistants sit in a chat bubble. This starter gives the agent the page: product views, a walkthrough, photo concepts, and a cart appear beside an uninterrupted conversation.
+Visitors type, speak, or tap suggested replies. The guide explains products, compares options, brings relevant visuals into view, and builds a cart when asked. The cart shares the visual stage with products, so it never covers the conversation.
 
-**Try it without keys.** The included fictional merchant, Studio, uses scripted replies and a local sample cart. No AI account, Shopify account, payment, or Cloudflare login is needed to run the default demo.
+![Fieldwork outdoor example](docs/images/outdoor-desktop.jpg)
+
+An MIT-licensed starter for **different kinds of shops**, with two fictional merchants running the same code: **Fieldwork** (outdoor goods) and **Daybreak** (coffee equipment and beans). Neither is a real store. Merchant content lives in configuration; there are no wall-hanging or interior-design rules in the core.
+
+## Try it locally
+
+Use Node **24 or 26** and npm. No AI keys or Shopify account are needed for the scripted demo.
 
 ```sh
 git clone https://github.com/leviseyes/agentic-storefront.git
@@ -16,68 +19,62 @@ npm ci
 npm run dev
 ```
 
-Open **http://localhost:3000** with Node **24 or 26**. The first start creates a local SQLite database through Wrangler. Your data stays in the ignored `.wrangler/` directory. Supported development platforms are those supported by Wrangler; CI runs on Linux and the initial demo was checked on macOS.
+Open the localhost URL printed by Vite. The launcher applies the local D1 migration first. Try “Add two pouches”, “Show me the bottle”, “750 ml”, “Compare products”, or “Remove the pouch”. Demo checkout takes no payment.
 
-Try these messages:
-
-- **“Show me the 3D model”** → inspect it, turn it around, separate the parts.
-- **“Show me how it works”** → open the walkthrough; the agent follows up when it closes.
-- **“Add two to my cart”**, **“make it five”**, **“remove one”** → update the cart in the left panel.
-- **“Empty my cart”** → remove the items. Checkout always stays a harmless local preview in demo mode.
-
-## What’s here
-
-| Capability | Keyless demo | With your own services |
-| --- | --- | --- |
-| Suggested replies, typed input, conversation history | Included; scripted responses | OpenAI structured responses |
-| Agent-selected product views | Original procedural 3D model + illustrations | Replace with your product assets |
-| Centered walkthrough + follow-up | Local authored sequence | Optional merchant YouTube video |
-| Cart add / remove / set quantity | Local sample cart | Shopify Storefront API |
-| Checkout | Explicit demo completion screen | Allowlisted Shopify checkout handoff |
-| Natural voice and interruption | Disabled | xAI realtime voice; ElevenLabs speech fallback |
-| Photo uploads and wall concepts | Disabled | OpenAI image editing + private R2 storage |
-
-**This is a focused single-product starter, not a finished commerce platform.** It supports one configured variant, US market context, and quantities from 0–20. Payments, tax, shipping options, discounts and orders belong to Shopify checkout. There is no order-management or Admin API access in the customer-facing app.
-
-## Make it your store
-
-1. Edit [`storefront.config.js`](storefront.config.js) for the public identity, guide name and demo price.
-2. Replace the fictional knowledge in [`client/shared/product-knowledge.js`](client/shared/product-knowledge.js), the sample conversation shortcuts in [`server/wall-conversation.mjs`](server/wall-conversation.mjs), and the product visuals. Verify every product and policy claim. The starter is deliberately tailored to one illustrative wall-mount product.
-3. Copy `.env.example` to **`.dev.vars`** for local credentials. Keep it private. The demo works without this file.
-4. Add only the providers you need. Keep `COMMERCE_MODE=demo` while testing AI and voice. Switch to Shopify deliberately after following the [configuration guide](docs/configuration.md).
-
-The UI hides sound and upload features until their server-side configuration is present. Provider credentials never go to the browser. Browser autoplay rules still apply: voice starts after the visitor enables sound.
-
-## Read next
-
-- [Configuration & provider setup](docs/configuration.md)
-- [Architecture, agent tools & boundaries](docs/architecture.md)
-- [Cloudflare deployment](docs/deployment.md)
-- [Asset origins](docs/assets.md) · [Design system](DESIGN.md)
-- [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+To try a different category:
 
 ```sh
-npm test          # deterministic regression tests; no paid API calls
-npm run typecheck
-npm run build
-npm run check:public
+npm run dev:coffee
 ```
 
-## Why this exists
+![Daybreak coffee example](docs/images/coffee-desktop.jpg)
 
-Built by Moshe Levis, extracted from work on a real conversation-first storefront. This edition starts with fresh Git history, fictional merchant content and no commercial credentials, customer data, product CAD, or deployment identifiers.
+## What is reusable
 
-The interesting part is what happens **after** the answer: a model selects a known visual, a server validates the requested action, and the interface stays useful while the conversation continues. Cart arithmetic and consent are application code, not a promise in a system prompt.
+- **Merchant configuration:** identity, guide, opening question, products, variants, prices, verified facts, use cases, policies, and owned visuals.
+- **Shopping:** product and variant selection, side-by-side comparisons, stock states, multi-item carts, and hosted Shopify checkout.
+- **Agent tools:** allowlisted collection, product, comparison, cart, policy, optional video, and optional photo-concept views. The model never supplies arbitrary HTML or executable UI.
+- **Voice:** optional xAI realtime speech; optional ElevenLabs speech output with OpenAI transcription. Sound starts by choice, and speaking input requires microphone permission. No avatar or customer account is required.
+- **Server authority:** explicit cart intent, quantity bounds, shared text/voice rules, persisted total targets, request deduplication, session locks, and rate limits.
+- **Anonymous sessions:** private cookies and D1 state, with optional private R2 photo assets and a fresh-conversation action.
 
-## Roadmap
+## Make it your shop
 
-- Multiple products and variants, without weakening cart consent.
-- A provider-neutral realtime voice interface.
-- More product scene adapters and measured latency examples.
-- An easier merchant knowledge authoring flow.
+Start with either file under `examples/`. Edit products, facts and policies, then choose your configuration in `storefront.config.js`. The UI and agent tools consume the same catalog. `defineStorefront()` rejects invalid IDs, duplicate options, invalid prices, and unsafe asset sources.
 
-Issues and pull requests are welcome. If this is useful, a star helps other builders find it.
+```js
+// storefront.config.js — replace the two demo imports when you add your merchant.
+import merchant from './examples/your-shop/storefront.js';
+import {defineStorefront} from './shared/storefront.js';
+export const storefront = defineStorefront(merchant);
+```
 
-## License
+The examples deliberately include **different option types**: colors, capacities, and coffee preparation. Add merchant-owned images or GLB models through product `visuals`. Photo concepts are an optional merchant tool; they are off in both examples.
 
-[MIT](LICENSE). Dependency licenses remain their own. AI and commerce services have separate terms and usage costs. The included room image is AI-generated; the product illustrations and procedural geometry are original sample assets. Nothing in the demo is a real product offer, installation instruction or customer testimonial.
+Connect your own provider keys in an ignored `.dev.vars` file. Set `COMMERCE_MODE=shopify` only after configuring your own product handles and variant mappings. Keys stay on the server. This project does not provision credentials or share any merchant’s secrets.
+
+Read [configuration](docs/configuration.md), [architecture](docs/architecture.md), [deployment](docs/deployment.md), and [asset provenance](docs/assets.md).
+
+## Scope
+
+This is a **curated-catalog starter**, currently limited to 20 products, 100 variants per product, 20 distinct cart options, and 20 units per option. It is general across product categories, but it is not a full catalog importer, marketplace, merchant admin, or order-management system. Arbitrary natural-language cart commands outside the supported grammar ask for clarification; the model cannot override consent rules.
+
+Shopify owns final inventory enforcement, shipping, taxes, eligible discounts, payment, and orders. Merchant facts and policies must be reviewed by the merchant. Photo concepts are illustrative; they do not establish measurements, safety, medical suitability, or product guarantees.
+
+The default demo makes no runtime AI or Shopify requests. Provider-backed flows cost money and require your account’s model access. Before public use, review privacy disclosures, abuse limits, merchant claims, monitoring, and checkout in a development store. See [SECURITY.md](SECURITY.md).
+
+## Development
+
+```sh
+npm test
+npm run typecheck
+npm run check:public
+npm run build
+npm run build:coffee
+```
+
+React + TypeScript + Vite, Cloudflare Workers + D1 + R2, Shopify Storefront GraphQL API **2026-10**. Tests cover both example catalogs, cart intent and retries, server privacy, media lifecycle, speech cancellation, transcript deduplication, and Shopify adapter behavior with injected responses. Provider audio and real-store checkout require your own staging checks.
+
+Contributions that make merchant setup simpler, add useful adapters, or improve accessibility are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md). If this is useful to you, a GitHub star helps others find it.
+
+[MIT license](LICENSE) · [Changelog](CHANGELOG.md)

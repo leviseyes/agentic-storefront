@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createNarration,readSoundEnabled,saveSoundEnabled,welcomeGreeting,returningGreeting} from '../client/wall/narration.ts';
+import {createNarration,readSoundEnabled,saveSoundEnabled,welcomeGreeting,returningGreeting} from '../client/voice/narration.ts';
 
 function setup(options={}){
   const events={spoken:[],blocked:[],errors:[],stops:0};

@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import ts from 'typescript';
-import {createNarration} from '../client/wall/narration.ts';
+import {createNarration} from '../client/voice/narration.ts';
 
 // Run the browser controller with real PCM playback code and fake browser I/O.
-const source=await readFile(new URL('../client/wall/live-voice.ts',import.meta.url),'utf8');
+const source=await readFile(new URL('../client/voice/live-voice.ts',import.meta.url),'utf8');
 const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText
  .replace('../voice/live-audio',new URL('../client/voice/live-audio.ts',import.meta.url).href);
 const {createLiveVoice}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));

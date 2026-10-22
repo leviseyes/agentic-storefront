@@ -1,6 +1,6 @@
 {
   "name": "agentic-storefront",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "engines": {
     "node": ">=24 <27"
@@ -13,7 +13,9 @@
     "typecheck": "tsc --noEmit",
     "deploy": "npm run build && wrangler deploy",
     "db:migrate": "wrangler d1 migrations apply agentic-storefront --local",
-    "check:public": "node scripts/check-public.mjs"
+    "check:public": "node scripts/check-public.mjs",
+    "dev:coffee": "node scripts/dev.mjs --mode coffee",
+    "build:coffee": "tsc --noEmit && vite build --mode coffee"
   },
   "dependencies": {
     "lucide-react": "^0.554.0",

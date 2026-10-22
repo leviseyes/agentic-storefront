@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mountDemoPlayer} from '../client/wall/demo-player.ts';
+import {mountDemoPlayer} from '../client/media/video-player.ts';
 
 function environment(t){
  for(const [key,value] of Object.entries({document:{createElement:()=>({})},location:{origin:'https://studio.test'}})){

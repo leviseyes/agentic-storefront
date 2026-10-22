@@ -1,43 +1,34 @@
 # Architecture
 
-```mermaid
-flowchart LR
-  UI[React conversation + visual stage] --> API[Cloudflare Worker]
-  API --> Session[D1 sessions + action lock]
-  API --> Media[Private R2 photos]
-  API --> Demo[Default scripted AI + sample cart]
-  API -. opt in .-> AI[OpenAI text + images]
-  API -. opt in .-> Voice[xAI realtime / ElevenLabs speech]
-  API -. opt in .-> Shop[Shopify Storefront cart]
-  Shop --> Checkout[Shopify hosted checkout]
-```
+The same merchant configuration feeds the React visual stage, scripted guide, model instructions, variant resolution and commerce adapter. `defineStorefront()` validates it before use. The two example merchants change content, not engine code.
 
-## Entry points
+## Request flow
 
-- `client/WallStudio.tsx` owns the two panels and current presentation.
-- `server/bootstrap.mjs` selects demo or Shopify commerce and scripted or OpenAI responses independently.
-- `server/wall-api.mjs` owns anonymous sessions, requests, uploads, action validation and checkout.
-- `server/cart-intent.mjs` checks explicit shopping intent and resolves relative/total quantities.
-- `server/grok-voice.mjs` constrains realtime messages and executes the same cart rules server-side.
-- `client/voice/` manages audio lifecycle, interruption and late event cancellation.
-- `server/wall-store.mjs` stores sessions and private object references.
+1. `worker.ts` routes `/api/studio`, voice, speech and static assets.
+2. `server/bootstrap.mjs` chooses demo or Shopify commerce and independently enables configured providers.
+3. `server/store-api.mjs` loads a private anonymous session, validates origin, acquires a session lock for changes and resolves cart requests through `server/shopping.mjs`.
+4. Explicit cart changes run before AI reasoning. Other turns use scripted decisions or the structured OpenAI adapter in `server/store-ai.mjs`.
+5. Presentation IDs are validated against the configured catalog. The browser renders authored React components in `client/VisualStage.tsx`; no model HTML or arbitrary URL is executed.
+6. `server/commerce.mjs` returns actual cart quantities, prices and stock from the selected adapter. Public state omits cart keys, checkout URLs and Shopify line IDs.
 
-React runs through Vite with a plain Cloudflare Worker. No server-rendering framework or Sites host is required. This repo is a starter with tested boundaries, not a claim of production hardening or PCI certification.
+The live voice engine in `server/voice-agent.mjs` uses the same shopping rules and Store API. Its `change_cart` tool has no model-supplied product or quantity parameters. The server resolves the visitor’s words and original selection context. Voice transcripts are revised by utterance ID rather than appended repeatedly. Provider audio bypasses slow persistence work; cancellation barriers discard late audio from interrupted responses.
 
-## Agent actions
+## Cart consistency
 
-Structured decisions can select an allowlisted visual, request a photo concept or propose a cart total. Arbitrary model HTML, URLs, scripts and render instructions are not accepted. Text commerce shortcuts avoid a model round trip for clear cart requests. A preview’s frame count and approval of a design are never purchase consent.
+“Add” resolves to a total using fresh cart state. The server saves that total target before a mutation, then saves Shopify’s returned cart. A repeated UUID returns its completed result instead of adding again. An unfinished operation can replay the total target under a session lock. If the provider returns an error and a fresh cart read succeeds, the failed intent is discarded so a visitor can try another option. If connectivity prevents recovery, the intent remains recoverable; New conversation can discard it.
 
-The cart supports one configured product variant and totals 0–20. Cart IDs, line keys and checkout URLs stay in server sessions. Only sanitized quantities, titles and totals are sent to the browser. Returned Shopify quantities win over model assumptions.
+This is bounded retry protection, not transactional exactly-once delivery across Shopify and D1. A lost create response can leave an orphan cart because Shopify and D1 do not share a transaction. Only the cart whose ID was successfully saved is used for checkout. Completed request IDs are retained for the last 40 turns; this is not a general payments idempotency service.
 
-The local demo cart is stateless and session-referenced. It cannot reserve inventory or charge money. Live commerce is an explicit server configuration change.
+## Sessions and assets
 
-## Data and controls
+Cookies are HttpOnly, SameSite=Lax, Secure on HTTPS, scoped by merchant ID and session version. Anonymous state expires after seven days. D1 holds messages, selection, private cart references, pending operations and optional image references. R2 stores optional private image bytes; asset endpoints require ownership by the same session. New conversation clears the local project and images, not Shopify orders or remote carts. Small request-time sweeps remove expired sessions; configure an R2 lifecycle as an additional retention backstop.
 
-Anonymous HttpOnly, SameSite=Lax cookies identify browser projects; Secure is used on HTTPS. Sessions expire after seven days. API access after expiry is denied; physical cleanup is opportunistic in bounded sweeps and is not a precise seven-day deletion scheduler. Add scheduled cleanup and R2 lifecycle policies for stronger retention requirements.
+Historical D1 table names retain the `wall_` prefix for migration compatibility; they impose no product-category behavior. Runtime modules and prompts are category-neutral. Replacing an image clears prior image references and bytes.
 
-Mutation endpoints verify same origin, request size and input types. Uploads check image signatures. Photos are served through session-scoped URLs. A project lock prevents overlapping mutations from applying stale data. Per-session and IP-based counters bound work; these are starter limits, not a full anti-abuse or budget enforcement system. Public AI hosting should also use provider spending limits and appropriate edge controls.
+## Boundaries
 
-Prompts explicitly treat visitor messages and photo text as untrusted. These instructions supplement server validation; they do not make prompt injection impossible. Avoid adding privileged Admin actions to this public-facing agent.
+This is a curated catalog, not full-text search across an entire Shopify shop. Unknown cart lines are shown read-only and can be reviewed at Shopify checkout. Local limits: 20 products, 100 variants per product, 20 configured cart lines, 20 units per option. The cart query reads the first 100 lines; do not reuse an externally expanded cart beyond this bound.
 
-The automated suite uses injected providers and WebSocket/audio mocks. It verifies orchestration and safety boundaries without calling paid services; it does not certify perceptual voice quality or end-to-end provider availability.
+Limits and locks in D1 guard session creation, chat, uploads, optional image generation and live voice. ElevenLabs proxy limits are per Worker isolate and do not replace edge-wide abuse protection. Add account-specific budgets, alerts and public traffic controls before production scale.
+
+Voice and AI are optional. The default demos make no runtime provider requests. Paid-provider behavior and merchant checkout still need staging verification with the deployer’s own accounts.

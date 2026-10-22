@@ -1,10 +1,11 @@
-# Asset origins
+# Assets
 
-- `public/brand/gallery-room.png`: an AI-generated fictional interior created for this repository. Exact generation prompt and tool provenance are in the adjacent `.asset.json` file. It is not a customer room or testimonial.
-- `public/product/mount.svg`, `strips.svg`, and `client/wall/hanger-scene.ts`: original illustrative geometry and diagrams, included under the repository’s MIT license. They are not scans, product CAD, branded photography or installation specifications.
-- `docs/images/`: screenshots captured from this repository’s rendered local demo. They contain fictional product and cart data.
-- Manrope: self-hosted through `@fontsource-variable/manrope`; font license is retained at `public/licenses/manrope.txt`.
-- Interface icons: `lucide-react`, under its package license.
-- Three.js and all other dependencies retain their respective package licenses. No third-party implementation is vendored.
+All included merchandise and brand names are fictional examples, not a real seller’s catalog. Product diagrams are original code-native SVG geometry, designed for this project and included under MIT. They illustrate configuration and are not manufacturing drawings.
 
-The original merchant’s logo, product photographs, CAD, packaging, provider avatar portraits, customer photos and video are excluded. Configure your own authorized media before using this starter for a real store. A merchant YouTube video is optional; the default walkthrough has no external media dependency.
+`public/examples/outdoor.png` and `coffee.png` are AI-generated fictional editorial scenes created for this project. Exact generation prompts are embedded in PNG metadata. Adjacent `.asset.json` files record their origins. No commercial Levitate imagery, logo, CAD or provider credentials are included.
+
+`docs/images/` contains screenshots of the actual local demo at the stated desktop/mobile widths; these are product evidence, not generated UI mockups. Screenshot origins are recorded in adjacent metadata.
+
+Manrope is self-hosted through `@fontsource-variable/manrope` under its upstream font license. Lucide icons and Three.js retain their upstream open-source licenses through npm.
+
+When adding your own images, GLB models or videos, verify redistribution rights. Use descriptive alt text. Configured model assets are lazy-loaded only when selected. STEP/STP files need conversion to GLB before use.

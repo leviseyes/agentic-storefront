@@ -1,0 +1,28 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createShopifyCommerce,operations,safeCart} from '../server/commerce.mjs';
+import {storefront} from '../storefront.config.js';
+import {variantsOf} from '../shared/storefront.js';
+const variants=variantsOf(storefront.products),map=Object.fromEntries(variants.map((v,i)=>[v.id,'gid://shopify/ProductVariant/'+(i+1)]));
+const money=amount=>({amount:String(amount),currencyCode:'USD'});
+const line=(id,quantity)=>({id:'private-line-'+id,quantity,merchandise:{id:map[id],title:id,price:money(12),product:{title:'Live '+id,handle:storefront.products.find(p=>p.variants.some(v=>v.id===id)).handle}},cost:{totalAmount:money(quantity*12)}});
+const cart=(lines=[])=>({id:'private-cart-key',checkoutUrl:'https://shop.example/checkouts/private-token',totalQuantity:lines.reduce((n,l)=>n+l.quantity,0),lines:{nodes:lines},cost:{subtotalAmount:money(99),totalAmount:money(99)}});
+function fixture(){let current=null,available=true,mismatch=false,error=false,adjust=false;const calls=[];
+ const api=createShopifyCommerce(storefront,{shopDomain:'sample.myshopify.com',privateToken:'server-private-token',buyerIp:'192.0.2.1',variantMap:map,fetchImpl:async(url,init)=>{
+  assert.equal(url,'https://sample.myshopify.com/api/2026-10/graphql.json');assert.equal(init.headers['Shopify-Storefront-Private-Token'],'server-private-token');assert.equal(init.headers['Shopify-Storefront-Buyer-IP'],'192.0.2.1');
+  const {query,variables}=JSON.parse(init.body);calls.push({query,variables});let data;
+  if(query===operations.catalog)data={nodes:variables.ids.map(gid=>{const v=variants.find(v=>map[v.id]===gid),p=storefront.products.find(p=>p.id===v.productId);return {id:gid,title:v.title,availableForSale:available,price:money(12),product:{title:p.title,handle:mismatch?'wrong':p.handle,description:'Live store description.',onlineStoreUrl:'https://shop.example/products/'+p.handle,featuredImage:{url:'https://cdn.shopify.com/example.jpg',altText:p.title}}};})};
+  else if(query===operations.get)data={cart:current};
+  else {const name=query===operations.create?'cartCreate':query===operations.add?'cartLinesAdd':query===operations.update?'cartLinesUpdate':'cartLinesRemove';
+   if(error)data={[name]:{cart:null,userErrors:[{message:'Inventory changed.'}],warnings:[]}};
+   else {let lines=current?.lines.nodes||[];if(name==='cartCreate'||name==='cartLinesAdd'){const source=name==='cartCreate'?variables.input.lines:variables.lines;lines=[...lines,...source.map(l=>line(variants.find(v=>map[v.id]===l.merchandiseId).id,adjust?1:l.quantity))];}
+   if(name==='cartLinesUpdate')lines=lines.map(l=>({...l,quantity:variables.lines.find(n=>n.id===l.id)?.quantity??l.quantity}));if(name==='cartLinesRemove')lines=lines.filter(l=>!variables.lineIds.includes(l.id));current=cart(lines);data={[name]:{cart:current,userErrors:[],warnings:adjust?[{message:'Quantity adjusted by the store.'}]:[]}};}}
+  return Response.json({data});
+ }});
+ return {api,calls,set current(v){current=v;},get current(){return current;},set available(v){available=v;},set mismatch(v){mismatch=v;},set error(v){error=v;},set adjust(v){adjust=v;}};
+}
+test('Shopify uses configured IDs, live prices and stock, and verifies product handles',async()=>{const h=fixture(),catalog=await h.api.catalog();assert.equal(catalog[0].variants[0].price.amount,'12');assert.deepEqual(h.calls[0].variables.ids,Object.values(map));h.available=false;assert.equal((await h.api.catalog())[1].variants[0].available,false);h.mismatch=true;await assert.rejects(h.api.catalog(),/mapping/);});
+test('Shopify changes only the requested line and uses actual returned quantities',async()=>{const h=fixture();h.adjust=true;let result=await h.api.setLineQuantity(null,'pouch-rust',4);assert.equal(result.cart.totalQuantity,1);assert.equal(result.warnings.length,1);h.adjust=false;result=await h.api.setLineQuantity(result.cart.id,'bottle-500',2);assert.equal(result.cart.totalQuantity,3);result=await h.api.setLineQuantity(result.cart.id,'pouch-rust',3);assert.equal(result.cart.totalQuantity,5);assert.equal(result.cart.lines.nodes.find(l=>l.merchandise.key==='bottle-500').quantity,2);result=await h.api.setLineQuantity(result.cart.id,'bottle-500',0);assert.equal(result.cart.totalQuantity,3);assert.equal((await h.api.clear(result.cart.id)).cart.totalQuantity,0);});
+test('Shopify errors, sold-out additions, unknown variants and expired carts cannot silently create orders',async()=>{const h=fixture();await assert.rejects(h.api.setLineQuantity(null,'unknown',1),/catalog/);await assert.rejects(h.api.setLineQuantity('expired','pouch-rust',1),/expired/);h.available=false;await assert.rejects(h.api.setLineQuantity(null,'pouch-rust',1),/unavailable/);h.available=true;h.error=true;await assert.rejects(h.api.setLineQuantity(null,'pouch-rust',1),/Inventory changed/);assert.equal(h.current,null);});
+test('removal still works when stock is unavailable and public state strips private references',async()=>{const h=fixture();h.current=cart([line('pouch-rust',3),line('bottle-500',2)]);h.available=false;const result=await h.api.setLineQuantity(h.current.id,'pouch-rust',0);assert.equal(result.cart.totalQuantity,2);const text=JSON.stringify(safeCart(result.cart));for(const secret of ['private-line','private-cart','private-token','gid://'])assert.equal(text.includes(secret),false);});
+test('Shopify configuration rejects arbitrary hosts and duplicate/missing mappings',()=>{for(const options of [{shopDomain:'evil.example',variantMap:map},{shopDomain:'sample.myshopify.com',variantMap:{}},{shopDomain:'sample.myshopify.com',variantMap:{...map,'daypack-ink':map['daypack-sand']}}])assert.throws(()=>createShopifyCommerce(storefront,options));});

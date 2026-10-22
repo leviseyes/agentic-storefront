@@ -9,7 +9,7 @@ async function walk(dir){for(const entry of await readdir(dir,{withFileTypes:tru
  const file=path.join(dir,entry.name),relative=path.relative(root,file);
  if(entry.isDirectory()){await walk(file);continue;}
  if((/^\.env/.test(entry.name)&&entry.name!=='.env.example')||/^\.dev\.vars/.test(entry.name))failures.push(relative+' (local environment file)');
- if(/\.(stp|step|glb|pem|key)$/i.test(entry.name))failures.push(relative+' (restricted asset/key type; review provenance)');
+ if(/\.(stp|step|pem|key)$/i.test(entry.name))failures.push(relative+' (restricted asset/key type; review provenance)');
  if(/\.(png|jpg|jpeg|webp|woff2?)$/i.test(entry.name))continue;
  const text=await readFile(file,'utf8');
  for(const [label,pattern] of Object.entries({credential:/\b(?:sk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{24,}|xai-[A-Za-z0-9_-]{24,}|shpat_[a-f0-9]{20,}|gh[pousr]_[A-Za-z0-9]{24,})\b/,privateKey:/-----BEGIN [A-Z ]*PRIVATE KEY-----/,localPath:/\/(?:Users|home)\/[A-Za-z0-9_-]+\//,deploymentId:/appgprj_[a-zA-Z0-9]+/}))if(pattern.test(text))failures.push(relative+' ('+label+')');
