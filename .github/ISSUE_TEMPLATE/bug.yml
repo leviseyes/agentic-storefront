@@ -1,0 +1,21 @@
+name: Bug report
+description: Something does not work as expected.
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the message/action, expected result, and actual result. Do not include secrets or private photos.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser, Node version, demo or Shopify mode, and commit/version.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or sanitized logs

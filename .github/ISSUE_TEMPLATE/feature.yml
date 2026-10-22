@@ -1,0 +1,14 @@
+name: Feature idea
+description: Suggest an improvement to the storefront.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested behavior
+      description: Explain the conversation and the action/visual it should produce.

@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T17:32:05.437810+00:00",
+  "title": "Design System: Agentic Storefront",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0086 84.57)",
+          "oklch(26% 0.0086 84.57)",
+          "oklch(38% 0.0086 84.57)",
+          "oklch(49% 0.0086 84.57)",
+          "oklch(61% 0.0086 84.57)",
+          "oklch(72% 0.0086 84.57)",
+          "oklch(84% 0.0086 84.57)",
+          "oklch(95% 0.0086 84.57)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Input White",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0128 93.88)",
+          "oklch(26% 0.0128 93.88)",
+          "oklch(38% 0.0128 93.88)",
+          "oklch(49% 0.0128 93.88)",
+          "oklch(61% 0.0128 93.88)",
+          "oklch(72% 0.0128 93.88)",
+          "oklch(84% 0.0128 93.88)",
+          "oklch(95% 0.0128 93.88)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Quiet Brown-Grey",
+        "tonalRamp": [
+          "oklch(15% 0.0186 82.76)",
+          "oklch(26% 0.0186 82.76)",
+          "oklch(38% 0.0186 82.76)",
+          "oklch(49% 0.0186 82.76)",
+          "oklch(61% 0.0186 82.76)",
+          "oklch(72% 0.0186 82.76)",
+          "oklch(84% 0.0186 82.76)",
+          "oklch(95% 0.0186 82.76)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Warm Brown",
+        "tonalRamp": [
+          "oklch(15% 0.0432 71.72)",
+          "oklch(26% 0.0432 71.72)",
+          "oklch(38% 0.0432 71.72)",
+          "oklch(49% 0.0432 71.72)",
+          "oklch(61% 0.0432 71.72)",
+          "oklch(72% 0.0432 71.72)",
+          "oklch(84% 0.0432 71.72)",
+          "oklch(95% 0.0432 71.72)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Deep Brown",
+        "tonalRamp": [
+          "oklch(15% 0.0354 73.16)",
+          "oklch(26% 0.0354 73.16)",
+          "oklch(38% 0.0354 73.16)",
+          "oklch(49% 0.0354 73.16)",
+          "oklch(61% 0.0354 73.16)",
+          "oklch(72% 0.0354 73.16)",
+          "oklch(84% 0.0354 73.16)",
+          "oklch(95% 0.0354 73.16)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Paper Edge",
+        "tonalRamp": [
+          "oklch(15% 0.0163 82.79)",
+          "oklch(26% 0.0163 82.79)",
+          "oklch(38% 0.0163 82.79)",
+          "oklch(49% 0.0163 82.79)",
+          "oklch(61% 0.0163 82.79)",
+          "oklch(72% 0.0163 82.79)",
+          "oklch(84% 0.0163 82.79)",
+          "oklch(95% 0.0163 82.79)"
+        ]
+      },
+      "tint": {
+        "role": "neutral",
+        "displayName": "Warm Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0161 82.79)",
+          "oklch(26% 0.0161 82.79)",
+          "oklch(38% 0.0161 82.79)",
+          "oklch(49% 0.0161 82.79)",
+          "oklch(61% 0.0161 82.79)",
+          "oklch(72% 0.0161 82.79)",
+          "oklch(84% 0.0161 82.79)",
+          "oklch(95% 0.0161 82.79)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Wordmark",
+        "purpose": "Studio identity; mobile size is smaller."
+      },
+      "headline": {
+        "displayName": "Intro headline",
+        "purpose": "The main introduction; product and cart headings use related fluid sizes."
+      },
+      "title": {
+        "displayName": "Supporting title",
+        "purpose": "Intro subsection and nearby panel-heading hierarchy."
+      },
+      "body": {
+        "displayName": "Assistant message",
+        "purpose": "Conversational reading with generous leading."
+      },
+      "body-base": {
+        "displayName": "Root and form text",
+        "purpose": "Default copy and accessible composer text."
+      },
+      "label": {
+        "displayName": "Primary action label",
+        "purpose": "Compact, weighted action text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "rendering-notice",
+        "value": "0 8px 30px #29272020",
+        "purpose": "Temporary rendering overlay."
+      },
+      {
+        "name": "settings-panel",
+        "value": "0 14px 40px #29272026",
+        "purpose": "Floating settings panel."
+      },
+      {
+        "name": "walkthrough-dialog",
+        "value": "0 24px 80px #211a1266",
+        "purpose": "Centered demonstration dialog."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-colors",
+        "value": "background-color .18s, color .18s",
+        "purpose": "Button, link, and select state transitions."
+      },
+      {
+        "name": "loading-spin",
+        "value": "1.2s linear infinite",
+        "purpose": "Loading indicator rotation."
+      },
+      {
+        "name": "voice-pulse",
+        "value": ".8s alternate infinite",
+        "purpose": "Speaking status opacity pulse."
+      },
+      {
+        "name": "walkthrough-transform",
+        "value": "transform .6s",
+        "purpose": "Sample illustration pose transitions."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none; transition: none; scroll-behavior: auto",
+        "purpose": "Apply when prefers-reduced-motion is reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-desktop-min",
+        "value": "1500px"
+      },
+      {
+        "name": "compact-desktop-max",
+        "value": "1100px"
+      },
+      {
+        "name": "stacked-mobile-max",
+        "value": "760px"
+      },
+      {
+        "name": "narrow-product-max",
+        "value": "380px"
+      },
+      {
+        "name": "narrow-header-max",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The brown filled action used to begin or advance the experience.",
+      "html": "<button class=\"ds-primary\">Try the storefront <svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></button>",
+      "css": ".ds-primary{font-family:\"Manrope Variable\",sans-serif;font-weight:450;font-weight:650;font-size:13px;line-height:1.6;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:11px;border:0;background:var(--accent,#65523b);color:var(--white,#fff);min-height:48px;border-radius:9px;padding:12px 18px;transition:background-color .18s,color .18s}.ds-primary:hover{background:var(--accent-hover,#433523)}.ds-primary:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}.ds-primary:disabled{opacity:.48;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The quiet outlined alternative used in the introduction.",
+      "html": "<button class=\"ds-secondary\">Continue without sound</button>",
+      "css": ".ds-secondary{font-family:\"Manrope Variable\",sans-serif;font-weight:450;font-size:13px;line-height:1.6;color:var(--ink,#292720);background:transparent;border:1px solid var(--line,#ded8cd);border-radius:9px;padding:12px 16px;min-height:44px;cursor:pointer;transition:background-color .18s,color .18s}.ds-secondary:hover{background:var(--tint,#eee8dd)}.ds-secondary:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+    },
+    {
+      "name": "Conversation Composer",
+      "kind": "input",
+      "refersTo": "composer",
+      "description": "A white text field with a shared focus outline and a separate action row.",
+      "html": "<div class=\"ds-composer\"><textarea aria-label=\"Message\" placeholder=\"Ask me about the hanger, or your wall\u2026\"></textarea><div class=\"ds-composer-actions\"><button class=\"ds-composer-send\" aria-label=\"Send message\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 19V5m-7 7 7-7 7 7\"/></svg></button></div></div>",
+      "css": ".ds-composer{background:var(--white,#fff);border:1px solid var(--line,#ded8cd);border-radius:16px;padding:12px}.ds-composer:focus-within{outline:2px solid var(--accent,#65523b);outline-offset:2px}.ds-composer textarea{font-family:\"Manrope Variable\",sans-serif;font-weight:450;display:block;resize:none;width:100%;height:55px;max-height:150px;border:0;outline:0;background:transparent;padding:4px 5px 6px;color:var(--ink,#292720);caret-color:var(--accent,#65523b);font-size:16px;line-height:1.6}.ds-composer textarea::placeholder{color:var(--muted,#686257);opacity:1}.ds-composer-actions{display:flex;justify-content:flex-end}.ds-composer-send{display:grid;place-items:center;width:42px;height:42px;background:var(--accent,#65523b);color:var(--white,#fff);border:0;border-radius:10px;cursor:pointer;transition:background-color .18s,color .18s}.ds-composer-send:hover{background:var(--accent-hover,#433523)}.ds-composer-send:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-composer-send{transition:none}}"
+    },
+    {
+      "name": "Suggestion Chip",
+      "kind": "chip",
+      "refersTo": "suggestion-chip",
+      "description": "A compact conversational shortcut with an outlined resting state.",
+      "html": "<button class=\"ds-suggestion\">Show me the 3D model <svg aria-hidden=\"true\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></button>",
+      "css": ".ds-suggestion{font-family:\"Manrope Variable\",sans-serif;font-weight:450;display:inline-flex;align-items:center;gap:6px;font-size:11px;line-height:1.6;min-height:36px;border:1px solid var(--line,#ded8cd);background:transparent;border-radius:8px;padding:7px 11px;text-align:left;color:var(--accent-hover,#433523);cursor:pointer;transition:background-color .18s,color .18s}.ds-suggestion:hover{background:var(--tint,#eee8dd)}.ds-suggestion:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-suggestion{transition:none}}"
+    },
+    {
+      "name": "User Message",
+      "kind": "card",
+      "refersTo": "user-message",
+      "description": "A content-sized tinted conversation bubble, aligned to the right.",
+      "html": "<article class=\"ds-user\"><span>You</span><p>Show me the 3D model</p></article>",
+      "css": ".ds-user{font-family:\"Manrope Variable\",sans-serif;font-weight:450;background:var(--tint,#eee8dd);color:var(--ink,#292720);border-radius:12px;padding:13px 17px;max-width:90%;width:fit-content;margin-left:auto}.ds-user span{font-size:11px;font-weight:750;color:var(--accent,#65523b)}.ds-user p{margin:3px 0 0;font-size:14px;line-height:1.7;overflow-wrap:anywhere}"
+    },
+    {
+      "name": "Cart Navigation",
+      "kind": "nav",
+      "refersTo": "cart-navigation",
+      "description": "The outlined header cart control with a filled circular quantity.",
+      "html": "<nav aria-label=\"Shopping\"><button class=\"ds-cart-nav\" aria-label=\"Open cart, 2 items\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"m6 3-3 4v14h18V7l-3-4ZM3 7h18M8 11a4 4 0 0 0 8 0\"/></svg><span>Cart</span><b>2</b></button></nav>",
+      "css": ".ds-cart-nav{font-family:\"Manrope Variable\",sans-serif;font-weight:450;display:inline-flex;align-items:center;gap:10px;padding:10px 15px;min-height:44px;border:1px solid var(--line,#ded8cd);background:transparent;color:var(--ink,#292720);border-radius:9px;font-size:13px;font-weight:650;cursor:pointer;transition:background-color .18s,color .18s}.ds-cart-nav:hover{background:var(--tint,#eee8dd)}.ds-cart-nav b{font-size:11px;min-width:20px;height:20px;display:grid;place-items:center;background:var(--accent,#65523b);color:var(--white,#fff);border-radius:50%;font-variant-numeric:tabular-nums}.ds-cart-nav:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-cart-nav{transition:none}}"
+    },
+    {
+      "name": "Product View Navigation",
+      "kind": "nav",
+      "description": "The stage angle selector with an underline on the selected view.",
+      "html": "<div class=\"ds-views\" role=\"group\" aria-label=\"Choose a hanger angle\"><button aria-pressed=\"true\">Front</button><button aria-pressed=\"false\">Back</button><button aria-pressed=\"false\">Separate parts</button></div>",
+      "css": ".ds-views{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}.ds-views button{font-family:\"Manrope Variable\",sans-serif;font-weight:450;padding:8px 14px;font-size:12px;line-height:1.6;min-height:44px;border-radius:8px;color:var(--muted,#686257);border:0;border-bottom:2px solid transparent;background:transparent;cursor:pointer;transition:background-color .18s,color .18s}.ds-views button:hover{background:var(--paper,#f7f4ee)}.ds-views button[aria-pressed=true]{color:var(--accent-hover,#433523);border-bottom-color:var(--accent,#65523b);font-weight:650}.ds-views button:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-views button{transition:none}}"
+    },
+    {
+      "name": "Cart Quantity Stepper",
+      "kind": "custom",
+      "description": "A grouped decrement, quantity, and increment control with tabular numerals.",
+      "html": "<div class=\"ds-quantity\" role=\"group\" aria-label=\"Quantity\"><button aria-label=\"Remove one unit\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12h14\"/></svg></button><output aria-label=\"Cart quantity\">2</output><button aria-label=\"Add one unit\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12h14M12 5v14\"/></svg></button></div>",
+      "css": ".ds-quantity{font-family:\"Manrope Variable\",sans-serif;font-weight:450;display:inline-flex;align-items:center;border:1px solid #b8ad9d;border-radius:10px;overflow:hidden}.ds-quantity button{width:44px;height:44px;display:grid;place-items:center;background:transparent;border:0;color:var(--accent,#65523b);cursor:pointer;transition:background-color .18s,color .18s}.ds-quantity button:hover{background:var(--paper,#f7f4ee)}.ds-quantity output{min-width:40px;text-align:center;color:var(--ink,#292720);font-size:14px;line-height:1.6;font-variant-numeric:tabular-nums;font-weight:650}.ds-quantity button:focus-visible{outline:3px solid var(--accent,#65523b);outline-offset:4px;}.ds-quantity button:disabled{opacity:.48;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-quantity button{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Warm Paper Storefront",
+    "overview": "Agentic Storefront inherits a warm paper surface, brown controls, and self-hosted Manrope. Large, tightly spaced headings provide the visual emphasis; generous prose leading and restrained dividers keep the shopping conversation readable. The sample merchant Studio, guide Alex, and product Studio Mount are fictional content for this reusable starter.\n\nThe visual stage and conversation share one quiet frame. Product inspection, imagery, and cart information occupy the stage while the conversation retains its own space. Material comes from warm tonal surfaces and imagery rather than decorative interface effects.",
+    "keyCharacteristics": [
+      "Warm paper and brown action colors.",
+      "One self-hosted variable type family with weight and scale doing the work.",
+      "A product stage beside the conversation on desktop, stacked above it on mobile.",
+      "Flat working surfaces, gently rounded controls, and explicit focus states."
+    ],
+    "rules": [
+      {
+        "name": "The Paper and Ink Rule",
+        "body": "Use paper for the conversation and tint for working stages; reserve white for inputs and small product-image surfaces. Brown carries actionable emphasis.",
+        "section": "colors"
+      },
+      {
+        "name": "The Single Family Rule",
+        "body": "Use Manrope throughout the storefront. Build hierarchy through the observed weight, size, and tracking relationships.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Surface Rule",
+        "body": "Keep the main panels flat. Reserve the existing ambient shadows for temporary floating surfaces.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve the warm paper, brown accent, and Manrope relationship when adapting merchant content.",
+      "Do keep the visual stage and conversation independently readable at desktop widths and stack them at the mobile breakpoint.",
+      "Do keep icons as inline SVG controls, with accessible labels and visible keyboard focus.",
+      "Do use tabular numerals for quantity, price, and totals.",
+      "Do retain reduced-motion behavior and the mobile composer\u2019s readable text size."
+    ],
+    "donts": [
+      "Don't replace the working panels with a grid of elevated cards.",
+      "Don't use brown text alone to communicate selected controls; preserve the existing fill, underline, or pressed-state treatment.",
+      "Don't introduce a second display family or all-caps heading system.",
+      "Don't add decorative eyebrow labels above headings; progress counts and speaker names are functional labels, not heading decoration."
+    ]
+  }
+}
